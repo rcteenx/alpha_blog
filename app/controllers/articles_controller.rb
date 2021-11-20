@@ -10,15 +10,21 @@ class ArticlesController < ApplicationController
   end
 
   def new
-
+    @article = Article.new
   end
 
   def create
     # white list variables.
     @article = Article.new(params.require(:article).permit(:title, :description))
-    @article.save
-    # redirect_to article_path(@article)
-    redirect_to @article # short version of the previous code.
+    
+    if @article.save
+      flash[:notice] = "Article was created successfully."
+      # redirect_to article_path(@article)
+      redirect_to @article # short version of the previous code.
+    else
+      # render the same form again with validation error messages.
+      render 'new' 
+    end 
   end
 
 end
